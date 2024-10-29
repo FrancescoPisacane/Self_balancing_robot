@@ -2,65 +2,65 @@
 
 # Balancing Robot
 
-This project is an Arduino-based self-balancing robot that uses a combination of an MPU6050 gyro/accelerometer sensor, an L298N motor driver, and PID control to maintain an upright position. The robot continuously adjusts its motors based on tilt data to achieve stability. This is a great project for exploring control systems, robotics, and sensor fusion techniques, including the use of the Kalman Filter.
+This project is an Arduino-based self-balancing robot that utilizes an MPU6050 accelerometer and gyroscope, an L298N motor driver, and a PID controller to maintain an upright position. The robot constantly reads its tilt angle and corrects its position by adjusting motor speed and direction.
 
 ## Features
 
-- **Self-Balancing**: The robot automatically balances itself by adjusting motor speed and direction based on tilt angle.
-- **PID Control**: A Proportional-Integral-Derivative (PID) controller is implemented to calculate precise adjustments to motor output based on the angle error, integral of past errors, and the rate of change in error.
-- **Kalman Filter**: The Kalman filter is used to improve the accuracy of the angle readings from the MPU6050 sensor, combining gyroscope and accelerometer data for a stable measurement.
+- **Self-Balancing**: The robot automatically balances itself by adjusting the motors based on tilt angle data.
+- **PID Control**: A Proportional-Integral-Derivative (PID) controller is implemented to ensure stable and responsive control, keeping the robot upright even with minor disturbances.
+- **Kalman Filter**: A Kalman filter is used to stabilize and smoothen the angle measurements by combining data from the gyroscope and accelerometer, providing an accurate angle estimation.
 
 ## Components Used
 
-1. **Arduino Board** (e.g., Arduino Uno or Nano): The main microcontroller that processes sensor data and controls the motors.
-2. **MPU6050 Gyroscope and Accelerometer**: Provides tilt and rotation data. This sensor is crucial for determining the angle of the robot relative to the ground.
-3. **L298N Motor Driver**: Controls the speed and direction of the motors based on the PID output.
-4. **DC Motors with Wheels**: Provide movement and stabilization.
-5. **Battery**: Power supply for the entire system.
+1. **Arduino Board** (e.g., Arduino Uno or Nano): Acts as the main controller, processing sensor data and sending signals to the motors.
+2. **MPU6050 Gyroscope and Accelerometer**: Provides real-time tilt and rotational data for precise angle measurement.
+3. **L298N Motor Driver**: Controls the speed and direction of the motors based on PID calculations.
+4. **DC Motors with Wheels**: Act as the actuators, adjusting the robot's tilt and allowing it to balance.
+5. **Power Supply (Battery)**: Provides power to the entire setup.
 
 ## How It Works
 
-1. **Angle Measurement**:
-   - The MPU6050 sensor provides both gyroscope and accelerometer data. The accelerometer measures the tilt angle relative to gravity, while the gyroscope measures the rate of change in angle.
-   - These readings are combined using a **Kalman Filter** to create a more accurate and stable angle measurement, filtering out noise from the accelerometer and compensating for gyroscope drift over time.
+1. **Angle Measurement with Kalman Filter**:
+   - The MPU6050 provides raw data from both the accelerometer and gyroscope.
+   - The **Kalman filter** is applied to combine the accelerometer and gyroscope data, providing a more stable and accurate tilt angle. The filter minimizes noise from the accelerometer and compensates for drift in the gyroscope.
 
-2. **Kalman Filter**:
-   - The Kalman filter is applied to stabilize the angle measurement by fusing gyroscope and accelerometer data. This filter predicts the next state (angle and bias) and then corrects it based on new measurements, minimizing error. The result is a smooth and reliable angle reading, essential for precise control.
+2. **Kalman Filter Process**:
+   - The Kalman filter operates by predicting the next angle based on the previous state and gyroscope data.
+   - It then corrects the angle based on new accelerometer measurements, producing an accurate angle value with minimal noise. This filtered angle is used as input for the PID controller.
 
 3. **PID Control**:
-   - The PID controller continuously calculates the error between the current angle and the target angle (usually set to 0 degrees for an upright position).
-   - The controller adjusts motor speed based on three components:
+   - The robot uses a **PID controller** to determine the appropriate motor response based on the angle error.
      - **Proportional (P)**: Corrects based on the current angle error.
-     - **Integral (I)**: Accounts for cumulative errors over time.
-     - **Derivative (D)**: Reacts to the rate of change in error.
-   - The combined output from the PID controller adjusts the motors to counteract any tilt and keep the robot balanced.
+     - **Integral (I)**: Adjusts for accumulated errors over time to eliminate offset.
+     - **Derivative (D)**: Reacts to the rate of change in error, providing damping to avoid oscillations.
+   - The PID output is used to control motor speed and direction, applying corrective force to counteract the tilt.
 
-4. **Motor Adjustment**:
-   - Based on the PID output, the L298N motor driver controls the motors' speed and direction to keep the robot balanced. If the robot tilts forward, the motors spin in a direction to bring it back upright, and vice versa.
+4. **Motor Control**:
+   - Based on the PID output, the **L298N motor driver** adjusts the speed and direction of the motors to maintain balance.
+   - If the robot tilts forward, the motors spin in a direction to bring it back to the upright position, and vice versa.
 
 ## Code Explanation
 
-- **Kalman Filter Implementation**: The code uses a Kalman filter function that fuses accelerometer and gyroscope data for accurate angle estimation.
-- **PID Control Loop**: In the main loop, the PID controller calculates adjustments for the motors based on the filtered angle measurement.
-- **Motor Control**: The motor speed and direction are adjusted in real-time to balance the robot.
+- **Kalman Filter Implementation**: A dedicated function handles the Kalman filter, processing gyroscope and accelerometer data for an accurate angle estimate.
+- **PID Control Loop**: The main loop calculates the PID output and adjusts motor speed accordingly to counteract any tilt.
+- **Motor Control Function**: A function that interprets the PID output to control the direction and speed of the motors, depending on whether the robot needs to move forward or backward.
 
-## How to Run the Code
+## Setup and Usage
 
 1. Upload the provided `.ino` file to your Arduino board.
-2. Ensure that the MPU6050, L298N motor driver, and motors are correctly connected to the Arduino.
-3. Power the robot with a suitable battery and place it on a flat surface.
-4. The robot should begin balancing automatically. Adjust PID values if necessary for optimal performance.
+2. Connect the MPU6050, L298N motor driver, and motors according to the wiring diagram.
+3. Power the system and place the robot on a flat surface.
+4. The robot will attempt to balance itself. Adjust PID parameters (`Kp`, `Ki`, `Kd`) if necessary for optimal performance.
 
-## Tips for Calibration
+## Tuning Tips
 
-- **PID Tuning**: Adjust `Kp`, `Ki`, and `Kd` values to improve the balancing performance. Start with `Kp` for basic correction, then add `Kd` for stability, and finally, use `Ki` sparingly to correct any persistent tilt over time.
-- **Kalman Filter**: The Kalman filter parameters (such as process and measurement noise) might need minor adjustments depending on your setup for optimal stability.
+- **PID Tuning**: Experiment with `Kp`, `Ki`, and `Kd` values for best stability. Start with a higher `Kp` for responsive control, adjust `Kd` to reduce oscillations, and use `Ki` carefully to correct small persistent angles.
+- **Kalman Filter Adjustment**: You can fine-tune `Q_angle`, `Q_bias`, and `R_measure` if you notice instability in the angle reading.
 
-## Challenges and Future Improvements
+## Future Improvements
 
-- **Surface Sensitivity**: The robot may perform differently on various surfaces. Further tuning might be needed for different terrains.
-- **Battery Management**: For consistent performance, consider adding a voltage regulator or battery monitor to prevent drops in power.
-- **Obstacle Avoidance**: Adding sensors (like ultrasonic or infrared) could allow the robot to avoid obstacles.
+- **Surface Adaptability**: Optimize the robot to balance on various surfaces by dynamically adjusting PID values.
+- **Battery Monitoring**: Add a feature to monitor battery levels to avoid performance issues due to low power.
+- **Obstacle Avoidance**: Enhance the robot with sensors to avoid obstacles or change direction when needed.
 
-This balancing robot project is a rewarding way to dive into the world of control systems, sensor fusion, and robotics. The Kalman filter and PID controller are powerful tools for any engineer interested in creating stable and responsive systems.
-
+This self-balancing robot is a great way to learn about control systems, sensor fusion, and robotics. The Kalman filter and PID controller are both essential components in modern control applications, making this project an educational and practical experience.
