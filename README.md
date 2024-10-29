@@ -60,7 +60,6 @@ This project is an Arduino-based self-balancing robot that utilizes an MPU6050 a
 ## Future Improvements
 
 - **Surface Adaptability**: Optimize the robot to balance on various surfaces by dynamically adjusting PID values.
-- **Battery Monitoring**: Add a feature to monitor battery levels to avoid performance issues due to low power.
 - **Obstacle Avoidance**: Enhance the robot with sensors to avoid obstacles or change direction when needed.
 
 This self-balancing robot is a great way to learn about control systems, sensor fusion, and robotics. The Kalman filter and PID controller are both essential components in modern control applications, making this project an educational and practical experience.
