@@ -1,3 +1,5 @@
+![Balancing Robot](IMG_1569.jpg)
+
 # Balancing Robot
 
 This project is an Arduino-based self-balancing robot that uses a combination of an MPU6050 gyro/accelerometer sensor, an L298N motor driver, and PID control to maintain an upright position. The robot continuously adjusts its motors based on tilt data to achieve stability. This is a great project for exploring control systems, robotics, and sensor fusion techniques, including the use of the Kalman Filter.
